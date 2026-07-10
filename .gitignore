@@ -1,0 +1,30 @@
+# Entorno virtual
+.venv/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# VS Code
+.vscode/
+
+# Archivos temporales
+temp/
+*.tmp
+
+# Base de datos temporal
+*.db-journal
+
+# Windows
+Thumbs.db
+desktop.ini
+
+# Synology
+@eaDir/
+
+# Logs
+logs/
+
+# Cache
+.cache/
