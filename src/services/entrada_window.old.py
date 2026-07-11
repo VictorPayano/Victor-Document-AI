@@ -118,6 +118,10 @@ class EntradaWindow(QMainWindow):
 
     def aceptar_documento(self):
 
+        raise Exception("ACEPTAR SE EJECUTÓ")
+    
+        print("ENTRÓ EN ACEPTAR")
+
         item = self.lista.currentItem()
 
         if item is None:
@@ -135,12 +139,4 @@ class EntradaWindow(QMainWindow):
             destino
     )
 
-        self.cargar_documentos()
-
-        if self.lista.count():
-            self.lista.setCurrentRow(0)
-
-        self.lbl_tipo.setText("Sin analizar")
-        self.lbl_empresa.setText("-")
-        self.lbl_persona.setText("-")
-        self.lbl_destino.setText("-")
+        self.cargar_documentos()    

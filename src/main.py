@@ -13,6 +13,8 @@ from database.database import BaseDatos
 from inventory.discovery import Descubrimiento
 from PySide6.QtWidgets import QApplication
 from app.main_window import MainWindow
+from inventory.discovery import Descubrimiento
+from core.system import Sistema
 def main():
 
     Sistema.mostrar_banner()
