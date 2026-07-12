@@ -1,40 +1,32 @@
 from pathlib import Path
 
+from services.pdf_reader import PDFReader
+from services.analyzer_filename import AnalyzerFilename
+from services.analyzer_text import AnalyzerText
+
 
 class Analyzer:
 
+    def __init__(self):
+
+        self.pdf_reader = PDFReader()
+        self.filename = AnalyzerFilename()
+        self.text = AnalyzerText()
+
     def analizar(self, archivo: Path):
 
-        nombre = archivo.stem.lower()
+        texto = self.pdf_reader.extraer_texto(archivo)
 
-        resultado = {
-            "categoria": "Sin clasificar",
-            "empresa": "-",
-            "persona": "-",
-            "destino": "-",
-            "confianza": 20,
-        }
+        print("\n========== TEXTO EXTRAÍDO ==========\n")
+        print(texto[:3000])
+        print("\n====================================\n")
 
-        # ============================
-        # Bancos
-        # ============================
+        if texto:
 
-        if "ing" in nombre:
-            resultado["categoria"] = "Banco"
-            resultado["empresa"] = "ING"
-            resultado["destino"] = "Victor/Banco/ING"
-            resultado["confianza"] = 98
+            print("📄 Analizando contenido del PDF...")
 
-        elif "abn" in nombre:
-            resultado["categoria"] = "Banco"
-            resultado["empresa"] = "ABN AMRO"
-            resultado["destino"] = "Victor/Banco/ABN AMRO"
-            resultado["confianza"] = 98
+            return self.text.analizar(texto)
 
-        elif "rabobank" in nombre:
-            resultado["categoria"] = "Banco"
-            resultado["empresa"] = "Rabobank"
-            resultado["destino"] = "Victor/Banco/Rabobank"
-            resultado["confianza"] = 98
+        print("📁 Analizando nombre del archivo...")
 
-        return resultado
+        return self.filename.analizar(archivo)

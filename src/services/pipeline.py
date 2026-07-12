@@ -10,6 +10,7 @@ class Pipeline:
 
         self.analyzer = Analyzer()
         self.document_manager = DocumentManager()
+        
 
     # ================================
     # Analizar
@@ -18,13 +19,13 @@ class Pipeline:
     def procesar(self, archivo: Path):
 
         print("PIPELINE:", archivo)
-
+       
         resultado = self.analyzer.analizar(archivo)
 
         print(resultado)
 
         return resultado
-
+    
     # ================================
     # Mover documento
     # ================================

@@ -1,14 +1,23 @@
 
 from services.pipeline import Pipeline
+from core.settings import Settings
 from pathlib import Path
 from datetime import datetime
 
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
-    QMainWindow, QWidget, QLabel, QListWidget,
-    QVBoxLayout, QHBoxLayout, QGroupBox,
-    QPushButton, QFormLayout
+     QMainWindow,
+     QWidget,
+     QLabel,
+     QListWidget,
+     QVBoxLayout,
+     QHBoxLayout,
+     QGroupBox,
+     QPushButton,
+     QFormLayout,
+     QFileDialog
 )
+
 
 class EntradaWindow(QMainWindow):
 
@@ -17,7 +26,9 @@ class EntradaWindow(QMainWindow):
 
         self.setWindowTitle("Victor Document AI - Entrada")
         self.resize(1100,700)
-        self.ruta_entrada=Path("D:/Entrada")
+        self.settings = Settings()
+        self.ruta_entrada = self.settings.origen
+        self.ruta_destino = self.settings.destino
 
         central=QWidget()
         self.setCentralWidget(central)
@@ -67,14 +78,18 @@ class EntradaWindow(QMainWindow):
 
         self.btn_analizar=QPushButton("🤖 Analizar")
         self.btn_aceptar=QPushButton("✔ Aceptar")
-        self.btn_carpeta=QPushButton("📂 Cambiar carpeta")
+        self.btn_origen=QPushButton("📂 Cambiar origen")
+        self.btn_destino=QPushButton("📁 Cambiar destino")
         self.pipeline = Pipeline()
+        self.btn_origen.clicked.connect(self.cambiar_origen)
+        self.btn_destino.clicked.connect(self.cambiar_destino)
         self.btn_analizar.clicked.connect(self.analizar_documento)
         self.btn_aceptar.clicked.connect(self.aceptar_documento)
 
+        derecha.addWidget(self.btn_origen)
+        derecha.addWidget(self.btn_destino)
         derecha.addWidget(self.btn_analizar)
         derecha.addWidget(self.btn_aceptar)
-        derecha.addWidget(self.btn_carpeta)
         derecha.addStretch()
 
         self.cargar_documentos()
@@ -82,12 +97,19 @@ class EntradaWindow(QMainWindow):
             self.lista.setCurrentRow(0)
 
     def cargar_documentos(self):
+        print("Ruta actual:", self.ruta_entrada)
+        print("Existe:", self.ruta_entrada.exists())
+
         self.lista.clear()
+
         if not self.ruta_entrada.exists():
             self.lista.addItem("La carpeta D:\\Entrada no existe.")
             return
-        for pdf in sorted(self.ruta_entrada.glob("*.pdf")):
-            self.lista.addItem("📄 "+pdf.name)
+        for archivo in sorted(self.ruta_entrada.iterdir()):
+            print(archivo.name, archivo.is_file(), archivo.suffix)
+            if archivo.is_file():
+                self.lista.addItem("📄 " + archivo.name)
+
 
     def documento_seleccionado(self, actual, anterior):
         if actual is None:
@@ -115,6 +137,20 @@ class EntradaWindow(QMainWindow):
         self.lbl_empresa.setText(resultado["empresa"])
         self.lbl_persona.setText(resultado["persona"])
         self.lbl_destino.setText(resultado["destino"])
+
+
+    def cambiar_origen(self):
+        carpeta = QFileDialog.getExistingDirectory(self,"Seleccionar carpeta de origen",str(self.ruta_entrada))
+        if carpeta:
+            self.settings.set_origen(carpeta)
+            self.ruta_entrada=self.settings.origen
+            self.cargar_documentos()
+
+    def cambiar_destino(self):
+        carpeta = QFileDialog.getExistingDirectory(self,"Seleccionar carpeta de destino",str(self.ruta_destino))
+        if carpeta:
+            self.settings.set_destino(carpeta)
+            self.ruta_destino=self.settings.destino
 
     def aceptar_documento(self):
 

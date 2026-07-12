@@ -1,14 +1,23 @@
 
 from services.pipeline import Pipeline
+from core.settings import Settings
 from pathlib import Path
 from datetime import datetime
 
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
-    QMainWindow, QWidget, QLabel, QListWidget,
-    QVBoxLayout, QHBoxLayout, QGroupBox,
-    QPushButton, QFormLayout
+     QMainWindow,
+     QWidget,
+     QLabel,SSS
+     QListWidget,
+     QVBoxLayout,
+     QHBoxLayout,
+     QGroupBox,
+     QPushButton,
+     QFormLayout,
+     QFileDialog
 )
+
 
 class EntradaWindow(QMainWindow):
 
@@ -17,7 +26,9 @@ class EntradaWindow(QMainWindow):
 
         self.setWindowTitle("Victor Document AI - Entrada")
         self.resize(1100,700)
-        self.ruta_entrada=Path("D:/Entrada")
+        self.settings = Settings()
+        self.ruta_entrada = self.settings.origen
+        self.ruta_destino = self.settings.destino
 
         central=QWidget()
         self.setCentralWidget(central)
@@ -118,10 +129,6 @@ class EntradaWindow(QMainWindow):
 
     def aceptar_documento(self):
 
-        raise Exception("ACEPTAR SE EJECUTÓ")
-    
-        print("ENTRÓ EN ACEPTAR")
-
         item = self.lista.currentItem()
 
         if item is None:
@@ -139,4 +146,12 @@ class EntradaWindow(QMainWindow):
             destino
     )
 
-        self.cargar_documentos()    
+        self.cargar_documentos()
+
+        if self.lista.count():
+            self.lista.setCurrentRow(0)
+
+        self.lbl_tipo.setText("Sin analizar")
+        self.lbl_empresa.setText("-")
+        self.lbl_persona.setText("-")
+        self.lbl_destino.setText("-")
