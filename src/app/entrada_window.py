@@ -168,8 +168,10 @@ class EntradaWindow(QMainWindow):
 
         self.pipeline.aceptar(
             archivo,
-            destino
-    )
+            destino,
+            self.ruta_destino
+)
+    
 
         self.cargar_documentos()
 
