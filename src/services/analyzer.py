@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from services.pdf_reader import PDFReader
+from services.extractor import Extractor
 from services.analyzer_filename import AnalyzerFilename
 from services.analyzer_text import AnalyzerText
 
@@ -9,24 +9,47 @@ class Analyzer:
 
     def __init__(self):
 
-        self.pdf_reader = PDFReader()
+        self.extractor = Extractor()
         self.filename = AnalyzerFilename()
         self.text = AnalyzerText()
 
+    # ================================
+    # Analizar documento
+    # ================================
+
     def analizar(self, archivo: Path):
 
-        texto = self.pdf_reader.extraer_texto(archivo)
+        print("\n===================================")
+        print("ANALYZER")
+        print("Archivo:", archivo)
+        print("===================================\n")
 
-        print("\n========== TEXTO EXTRAÍDO ==========\n")
-        print(texto[:3000])
-        print("\n====================================\n")
+        texto = self.extractor.extraer(archivo)
 
-        if texto:
+        if texto.strip():
 
-            print("📄 Analizando contenido del PDF...")
+            print("Analizando contenido del documento...")
 
-            return self.text.analizar(texto)
+            resultado = self.text.analizar(texto)
+            resultado["texto"] = texto
+            return resultado
 
-        print("📁 Analizando nombre del archivo...")
+        print("No se encontro texto. Analizando nombre del archivo...")
+        resultado = self.filename.analizar(archivo)
+        resultado["texto"] = ""
+        return resultado
 
-        return self.filename.analizar(archivo)
+    def aprender_destino(
+        self,
+        resultado,
+        destino,
+        persona_elegida=None,
+        instancias_elegidas=None,
+    ):
+
+        self.text.aprender_destino(
+            resultado,
+            destino,
+            persona_elegida,
+            instancias_elegidas,
+        )

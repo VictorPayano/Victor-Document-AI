@@ -15,6 +15,13 @@ temp/
 
 # Base de datos temporal
 *.db-journal
+data/document_catalog.db*
+
+# Datos locales y privados (se sincronizan mediante Synology Drive, no Git)
+data/*
+
+# Archivos de trabajo generados por la aplicación
+tmp/
 
 # Windows
 Thumbs.db

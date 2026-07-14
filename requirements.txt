@@ -1,0 +1,7 @@
+PySide6
+PyMuPDF
+pytesseract
+Pillow
+openai
+python-dotenv
+reportlab

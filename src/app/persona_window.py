@@ -11,6 +11,7 @@ from PySide6.QtWidgets import (
 )
 
 from core.system import Sistema
+from core.settings import Settings
 from explorer.explorer import Explorer
 from widgets.navigation_bar import NavigationBar
 
@@ -33,7 +34,7 @@ class PersonaWindow(QMainWindow):
 
         self.explorer = Explorer()
 
-        self.ruta_inicio = Sistema.BIBLIOTECA / nombre
+        self.ruta_inicio = Settings().destino / "Personas" / nombre
 
         self.ruta_actual = self.ruta_inicio
 

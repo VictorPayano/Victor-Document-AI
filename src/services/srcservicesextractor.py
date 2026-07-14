@@ -3,31 +3,20 @@ from pathlib import Path
 import fitz
 import pytesseract
 from PIL import Image
-from core.settings import Settings
 
 
 class Extractor:
 
-    def __init__(self):
-        self.settings = Settings()
-
     def extraer(self, archivo: Path) -> str:
-
-        print("\n========== EXTRACTOR ==========")
-        print("Archivo:", archivo)
-        print("Extensión:", archivo.suffix)
-        print("===============================")   
 
         texto = self._extraer_pdf(archivo)
 
-        print("Texto PDF:", len(texto))
-
         # Si el PDF ya contiene texto, no hacemos OCR
         if len(texto.strip()) > 50:
-            print("PDF editable detectado")
+            print("✅ PDF editable detectado")
             return texto
 
-        print("PDF escaneado. Ejecutando OCR...")
+        print("📄 PDF escaneado. Ejecutando OCR...")
 
         return self._extraer_ocr(archivo)
 
@@ -66,7 +55,7 @@ class Extractor:
 
             texto += pytesseract.image_to_string(
                 imagen,
-                lang=self.settings.ocr_idioma
+                lang="nld+spa+eng"
             )
 
         pdf.close()
